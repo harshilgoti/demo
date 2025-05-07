@@ -1,18 +1,13 @@
 import express from "express";
 import connectToMongo from "./db/connection";
-import cors, { CorsOptions } from "cors";
+import cors from "cors";
 import cookie from "cookie-parser";
 import userRouter from "./routes/user.routes";
 import habitsRouter from "./routes/habits.routes";
+import { corsOptions } from "./constants";
 
 connectToMongo();
 const app = express();
-
-const corsOptions: CorsOptions = {
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTION"],
-  origin: "http://localhost:3000",
-};
 
 app.use(cors(corsOptions));
 app.use(cookie());

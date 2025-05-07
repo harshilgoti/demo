@@ -1,10 +1,19 @@
 import { NextFunction, Request, Response } from "express";
-import { User } from "../models/user.models";
+import { IUser, User } from "../models/user.models";
 import { ErrorResponse } from "../utils/ErrorResponse";
 import { asyncHandler } from "../utils/asyncHandler";
 import { ApiResponse } from "../utils/AppResponse";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import { cookieOptions } from "../constants";
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: IUser;
+    }
+  }
+}
 
 const register = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -87,17 +96,10 @@ const login = asyncHandler(
       "-password -refreshToken"
     );
 
-    const options = {
-      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      httpOnly: true,
-      secure: true,
-      sameSite: "none" as const,
-    };
-
     return res
       .status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", refreshToken, options)
+      .cookie("accessToken", accessToken, cookieOptions)
+      .cookie("refreshToken", refreshToken, cookieOptions)
       .json(new ApiResponse(200, loggedUser, "User login successfully"));
   }
 );
@@ -125,17 +127,10 @@ const logOut = asyncHandler(
       throw new Error("User not found");
     }
 
-    const options = {
-      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      httpOnly: true,
-      secure: true,
-      sameSite: "none" as const,
-    };
-
     return res
       .status(200)
-      .clearCookie("accessToken", options)
-      .clearCookie("refreshToken", options)
+      .clearCookie("accessToken", cookieOptions)
+      .clearCookie("refreshToken", cookieOptions)
       .json(new ApiResponse(200, {}, "User logout Successfully"));
   }
 );
@@ -168,17 +163,10 @@ const refreshToken = asyncHandler(
       user._id
     );
 
-    const options = {
-      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      httpOnly: true,
-      secure: true,
-      sameSite: "none" as const,
-    };
-
     return res
       .status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", newRefreshToken, options)
+      .cookie("accessToken", accessToken, cookieOptions)
+      .cookie("refreshToken", newRefreshToken, cookieOptions)
       .json(
         new ApiResponse(
           200,

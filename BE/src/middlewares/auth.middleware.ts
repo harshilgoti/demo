@@ -1,17 +1,10 @@
 import { NextFunction, Request, Response } from "express"; // Added Response import here
 import { asyncHandler } from "../utils/asyncHandler";
 import jwt from "jsonwebtoken";
-import { IUser, IUserModel, User } from "../models/user.models";
+import { IUser, User } from "../models/user.models";
 import { generateToken } from "../controllers/user.controllers";
 import mongoose from "mongoose";
-
-declare global {
-  namespace Express {
-    interface Request {
-      user?: IUser;
-    }
-  }
-}
+import { cookieOptions } from "../constants";
 
 export interface AuthenticatedRequest extends Request {
   user: IUser;
@@ -77,15 +70,8 @@ export const verifyJWT = asyncHandler(
               refreshToken: newRefreshToken,
             } = await generateToken(userId);
 
-            const options = {
-              expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-              httpOnly: true,
-              secure: true,
-              sameSite: "none" as const,
-            };
-
-            res.cookie("accessToken", newAccessToken, options);
-            res.cookie("refreshToken", newRefreshToken, options);
+            res.cookie("accessToken", newAccessToken, cookieOptions);
+            res.cookie("refreshToken", newRefreshToken, cookieOptions);
 
             req.user = user;
             next();
