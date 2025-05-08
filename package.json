@@ -1,0 +1,25 @@
+{
+  "name": "habits",
+  "version": "1.0.0",
+  "description": "A full-stack application for tracking daily habits and routines. This project consists of two main components: a frontend application (FE) and a backend API (BE).",
+  "main": "index.js",
+  "scripts": {
+    "setupenvdev": "cd FE && shx cp .env.sample .env.local && cd ../BE && shx cp .env.sample .env",
+    "client": "cd FE && npm run dev",
+    "server": "cd BE && npm run dev",
+    "postinstall": "cd FE && npm install --force && cd ../BE && npm install",
+    "dev": "concurrently \"npm run client\" \"npm run server\"",
+    "start": "npm run start:client && npm run start:server",
+    "start:client": "cd FE && npm run dev",
+    "start:server": "cd BE && npm run dev",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "cd FE && npm run build",
+    "build:server": "cd BE && npm run build"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.1",
+    "shx": "^0.4.0"
+  }
+}

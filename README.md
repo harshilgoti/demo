@@ -33,7 +33,7 @@ habits/
    cd habits
    ```
 
-2. You'll see two folders (`habits-fe` and `habits-be`) and the demo video file.
+2. You'll see two folders (`FE` and `BE`) and the demo video file.
 
 ### Running the Backend
 

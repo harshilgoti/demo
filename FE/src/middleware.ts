@@ -21,14 +21,13 @@ export function middleware(req: NextRequest) {
   }
 
   if (token && isPublicRoute) {
-    // Redirect to login if token is missing
+    // Redirect to dashboard if token is present
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
   return NextResponse.next(); // Continue to the requested page
 }
 
-// Apply middleware to all routes
 export const config = {
   matcher: "/((?!api/public|_next/static|_next/image|favicon.ico).*)",
 };
